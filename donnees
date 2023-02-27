@@ -1,0 +1,374 @@
+'''AERO1 GP121 2022 - Léïa ZAWADA - Laura FILET
+
+App
+'''
+class Resthonrant():
+    def __init__(self):
+        self.title = 'Res-THON-rant'
+        self.restaurant = [
+            ['║', '║'],
+            ['║', '║'],
+        ]
+        self.list_cli = ['Margaux', 'Gabriel', 'Jacques', 'Aurélie']
+        
+        
+class Donnees:
+    def __init__(self):
+        self.nb_tables_totale = 5 
+        self.nb_tables_dispo = 5
+        self.nb_places = [1,2,3,4,5]
+        self.refus = 0
+        self.refus_max = 3
+        self.max_place_table_1 = 2
+        self.max_place_table_2 = 3
+        self.pers_table_1 = 2
+        self.pers_table_2 = 3
+        self.fichier_client = [] 
+        self.prix_menu_1 = 30
+        self.prix_menu_2 = 18
+        self.prix_menu_3 = 25
+        self.menu_client = {}
+        self.c_e_a = 0
+        self.nomb_per = []
+        self.prix = 0
+        self.n_f_a = 0
+        
+
+############################################################################### 
+
+    def action_reservation(self):
+        global nb_tables_dispo
+        global max_place_table_1
+        global max_place_table_2
+        global pers_table_1
+        global pers_table_2
+        global restaurant
+    
+        pr = str(input('Saisir le prénom: '))
+        p = int(input('Saisir le nombre de personne: '))
+        n_t = int(input('Saisir le numéro de table: '))
+    
+        c = 0
+        pb = 0
+        if  n_t >2 : 
+            pb = str(input('table inexistante'))
+            pb = pb
+            pass
+    
+        
+        if p <= self.nb_tables_dispo :
+            
+            if n_t == 1 :
+                if p <= self.pers_table_1 :
+                
+                    self.nb_tables_dispo -= p
+                    self.pers_table_1 -= p 
+                    self.fichier_client.append(pr)
+                    self.nomb_per.append(p)
+                    
+                else :
+                    c = str(input("""Placement impossible, refusez la 
+                                  réservation (r) : """))
+                 
+                    if c == 'r' :
+                        self.refus += 1
+                        
+                    else:
+                        self.refus += 1
+                        
+                    
+            elif n_t == 2 :
+                
+                if p <= self.pers_table_2 :
+                    self.nb_tables_dispo -= p
+                    self.pers_table_2 -= p
+                    self.fichier_client.append(pr)
+                    self.nomb_per.append(p)
+                
+                else :
+                    
+                    c = str(input("""Placement impossible, refusez la 
+                                  réservation (r) : """))
+                 
+                    if c == 'r' :
+                        self.refus += 1
+                        
+                    else:
+                        self.refus += 1
+                        
+                
+            else :
+                
+                c = str(input("""Placement impossible, refusez la 
+                              réservation (r) : """))
+             
+                if c == 'r' :
+                    self.refus += 1
+                    
+                else:
+                    self.refus += 1
+                    
+                
+            
+        elif p > self.nb_tables_dispo : 
+            
+            c = str(input("""Placement impossible, refusez la 
+                          réservation (r) : """))
+         
+            if c == 'r' :
+                self.refus += 1
+                
+            else:
+                self.refus += 1
+                
+ 
+        self.c_e_a = len(self.fichier_client)
+        
+###############################################################################        
+        
+    def action_commande(self):
+        
+        for i in self.fichier_client :
+            pr = str(input('Saisir le numéro de commande : '))
+            n_m = str(input('Saisir le numéro du menu : '))
+            
+            
+            if pr == '1': 
+                if n_m == '3' :
+                    self.menu_client[self.fichier_client[0]] = self.prix_menu_3
+                    self.c_e_a -= 1
+                    
+                else :
+                    c = str(input("""Erreur de commande (r) : """))
+                 
+                    if c == 'r' :
+                        self.refus += 1
+                        break
+                    else:
+                        self.refus += 1
+                        break
+                    
+            
+            if pr == '2':
+                if n_m == '1':
+                    self.menu_client[self.fichier_client[1]] = self.prix_menu_1
+                    self.c_e_a -= 1
+                else :
+                    c = str(input("""Erreur de commande (r) : """))
+                 
+                    if c == 'r' :
+                        self.refus += 1
+                        break
+                    else:
+                        self.refus += 1
+                        break
+            
+            if pr == '3': 
+                if n_m == '2' :
+                    self.menu_client[self.fichier_client[-1]] = self.prix_menu_2
+                    self.c_e_a -= 1
+                else :
+                    c = str(input("""Erreur de commande (r) : """))
+                 
+                    if c == 'r' :
+                        self.refus += 1
+                        break
+                    else:
+                        self.refus += 1
+                        break
+                    
+            if pr > '3' : 
+                
+                c = str(input("""Numéro de commande inconnu (r) : """))
+                 
+                if c == 'r' :
+                    self.refus += 1
+                    break
+                else:
+                    self.refus += 1
+                    break
+        
+        if int(len(self.fichier_client)) == 1:
+            self.n_f_a = 1
+            
+        if int(len(self.fichier_client)) == 2:
+            self.n_f_a = 2
+            
+        if int(len(self.fichier_client)) == 3:
+            self.n_f_a = 3
+ 
+###############################################################################            
+            
+    def action_facture(self):
+        pr = str(input('Saisir le prénom : '))
+        n_m = int(input('Saisir le prix du menu : '))
+        n_p = int(input('Saisir le nombre de personnes : '))
+        
+        # pour 1 seule personne dans le restaurant
+        if int(len(self.fichier_client)) == 1:
+            if pr == str(self.fichier_client[0]):
+                if n_m == int(self.menu_client[self.fichier_client[0]]):
+                    if n_p == int(self.nomb_per[0]):
+                        self.prix += int(self.menu_client[self.fichier_client[0]])*int(self.nomb_per[0])
+                        self.n_f_a -= 1
+                    else:
+                        c = str(input("""Nombre de personnes incorrect (r) : """))
+                        
+                        if c == 'r' :
+                            self.refus += 1
+                            
+                        else:
+                            self.refus += 1
+                            
+                else:
+                    c = str(input("""Client : EH ! T'essaye de m'arnaquer ?! (r) : """))
+             
+                    if c == 'r' :
+                        self.refus += 1
+                        
+                    else:
+                        self.refus += 1
+                        
+            
+            else:
+                c = str(input("""Personne inconnu ou mal orthographié (r) : """))
+         
+                if c == 'r' :
+                    self.refus += 1
+                    
+                else:
+                    self.refus += 1
+                    
+                
+        # pour 2 personnes dans le restaurant        
+        if int(len(self.fichier_client)) == 2 :
+            
+            if pr == str(self.fichier_client[0]):
+                if n_m == int(self.menu_client[self.fichier_client[0]]):
+                    if n_p == int(self.nomb_per[0]):
+                        self.prix += int(self.menu_client[self.fichier_client[0]])*int(self.nomb_per[0])
+                        self.n_f_a -= 1
+                    else:
+                        c = str(input("""Nombre de personnes incorrect (r) : """))
+                        
+                        if c == 'r' :
+                            self.refus += 1
+                            
+                        else:
+                            self.refus += 1
+                            
+                else:
+                    c = str(input("""Client : EH ! T'essaye de m'arnaquer ?! (r) : """))
+             
+                    if c == 'r' :
+                        self.refus += 1
+                        
+                    else:
+                        self.refus += 1
+                        
+                    
+            if pr == str(self.fichier_client[-1]):
+                if n_m == int(self.menu_client[self.fichier_client[-1]]):
+                    if n_p == int(self.nomb_per[-1]):
+                        self.prix += int(self.menu_client[self.fichier_client[-1]])*int(self.nomb_per[-1])
+                        self.n_f_a -= 1
+                    else:
+                        c = str(input("""Nombre de personnes incorrect (r) : """))
+                        
+                        if c == 'r' :
+                            self.refus += 1
+                            
+                        else:
+                            self.refus += 1
+                            
+                else:
+                    c = str(input("""Client : EH ! T'essaye de m'arnaquer ?! (r) : """))
+             
+                    if c == 'r' :
+                        self.refus += 1
+                        
+                    else:
+                        self.refus += 1
+                                
+                
+        # pour 3 personnes dans le restaurant 
+        if int(len(self.fichier_client)) == 3:
+            if pr == str(self.fichier_client[0]):
+                if n_m == int(self.menu_client[self.fichier_client[0]]):
+                    if n_p == int(self.nomb_per[0]):
+                        self.prix += int(self.menu_client[self.fichier_client[0]])*int(self.nomb_per[0])
+                        self.n_f_a -= 1
+                    else:
+                        c = str(input("""Nombre de personnes incorrect (r) : """))
+                        
+                        if c == 'r' :
+                            self.refus += 1
+                            
+                        else:
+                            self.refus += 1
+                            
+                else:
+                    c = str(input("""Client : EH ! T'essaye de m'arnaquer ?! (r) : """))
+             
+                    if c == 'r' :
+                        self.refus += 1
+                        
+                    else:
+                        self.refus += 1
+                        
+                    
+            if pr == str(self.fichier_client[1]):
+                if n_m == int(self.menu_client[self.fichier_client[1]]):
+                    if n_p == int(self.nomb_per[1]):
+                        self.prix += int(self.menu_client[self.fichier_client[1]])*int(self.nomb_per[1])
+                        self.n_f_a -= 1
+                    else:
+                        c = str(input("""Nombre de personnes incorrect (r) : """))
+                     
+                        if c == 'r' :
+                            self.refus += 1
+                            
+                        else:
+                            self.refus += 1
+                            
+                else:
+                    c = str(input("""Client : EH ! T'essaye de m'arnaquer ?! (r) : """))
+                 
+                    if c == 'r' :
+                        self.refus += 1
+                        
+                    else:
+                        self.refus += 1
+                                
+                    
+            if pr == str(self.fichier_client[-1]):
+                if n_m == int(self.menu_client[self.fichier_client[-1]]):
+                    if n_p == int(self.nomb_per[-1]):
+                        self.prix += int(self.menu_client[self.fichier_client[-1]])*int(self.nomb_per[-1])
+                        self.n_f_a -= 1
+                    else:
+                        c = str(input("""Nombre de personnes incorrect (r) : """))
+                        
+                        if c == 'r' :
+                            self.refus += 1
+                            
+                        else:
+                            self.refus += 1
+                            
+                else:
+                    c = str(input("""Client : EH ! T'essaye de m'arnaquer ?! (r) : """))
+             
+                    if c == 'r' :
+                        self.refus += 1
+                        
+                    else:
+                        self.refus += 1
+                        
+        
+############################################################################### 
+
+    def action_refus(self):
+        global refus
+        self.refus += 1
+    
+    
