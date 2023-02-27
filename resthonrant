@@ -1,0 +1,580 @@
+'''AERO1 GP121 2022 - Léïa ZAADA - Laura FILET
+
+TextHmi + App
+'''
+
+import os
+from donnees import Donnees
+from donnees import Resthonrant
+
+
+class TextHmi:
+    '''Ihm text pour le terminal'''
+
+    def __init__(self):
+        # L'application
+        self.donnees = Donnees()
+        self.resthonrant = Resthonrant()
+
+        # Etat du programme
+        self.program_running = True
+        self.W = 0
+
+    def start(self):
+        '''Démarre le programme avec la boucle principale'''
+        self.loop()
+
+    def clear(self):
+        '''Efface le contenu du terminal'''
+        if os.name == 'posix':
+            os.system('clear')
+        else:
+            os.system('cls')
+
+    def loop(self):
+        '''Boucle principale en deux étapes. :
+
+        NE PAS MODIFIER CETTE FONCTION
+
+        1) Affichage. Utilise les attributs de app.
+        2) Saisie d'un code xxx pour appeler une méthode nommée action_xxx.
+
+        Les méthodes action_xxx doivent appeler les méthodes de app pour
+        modifier les attributs de self.app. Ainsi au prochain tour de boucle,
+        display affichera les nouvelles valeurs.
+
+        Les programmes qui ont besoin de conserver des données pour le prochain
+        tour de boucle doivent stocker ces données dans les attributs de app.
+        '''
+        while self.program_running:
+            if self.W == 0 :
+                self.display_accueil()
+                self.process_accueil_input()
+            elif self.W == 1 :
+                self.display_p1()
+                self.process_p1_input()
+            elif self.W == 2 : 
+                self.display_p2()
+                self.process_p2_input()
+            elif self.W == 3 : 
+                self.display_p3()
+                self.process_p3_input()
+            elif self.W == 4 :
+                self.display_suite()
+                self.process_suite()
+            else:
+                self.display_fin()
+                self.process_fin_input()
+                
+        print(" ")
+        
+#------------------------------------------------------------------------------
+    # écran d'acceuil    
+    def display_accueil(self):
+        '''Affichage avec les données stockées dans les attribut de app'''
+        # 1) Effacement de l'écran.
+
+        # C'est le seul endroit où l'on appelle clear()
+        self.clear()
+
+        # 2) Texte à afficher
+        # https://en.self.Wikipedia.org/self.Wiki/Box-draself.Wing_character
+        
+        # Haut
+        screen_title = '╔═════════════════════════════════════════════════════════════════════════════════════╗\n'
+        screen_title +='║ ______                  _____  _   _  _____  _   _                             _    ║\n'
+        screen_title +='║ | ___ \                |_   _|| | | ||  _  || \ | |                           | |   ║\n'
+        screen_title +='║ | |_/ / ___  ___  ______ | |  | |_| || | | ||  \| | ______  _ __  __ _  _ __  | |_  ║\n'
+        screen_title +='║ |    / / _ \/ __||______|| |  |  _  || | | || . ` ||______|| .__|/ _` || ._ \ | __| ║\n'
+        screen_title +='║ | |\ \|  __/\__ \        | |  | | | |\ \_/ /| |\  |        | |  | (_| || | | || |_  ║\n'
+        screen_title +='║ \_| \_|\___||___/        \_/  \_| |_/ \___/ \_| \_/        |_|   \__,_||_| |_| \__| ║\n'
+        screen_title +='║                                                                                     ║\n'
+        screen_title +='║                                                                                     ║\n'
+        screen_title +='║                                                                                     ║\n'
+        screen_title +='║                                     |                                               ║\n'
+        screen_title +='║                                     |                                               ║\n'
+        screen_title +='║                                    ,|.                                              ║\n'
+        screen_title +='║                                   ,\|/.                                             ║\n'
+        screen_title +='║                                 ,. .V. `.                                           ║\n'
+        screen_title +='║                                / .     . \                                          ║\n'
+        screen_title +='║                               /_.       ._\                                         ║\n'
+        screen_title +='║                              ,. .:     ;, `.                                        ║\n'
+        screen_title +='║                              |@)|  . .  |(@|                                        ║\n'
+        screen_title +='║                         ,-._ `._.;  .  :`_,. _,-.                                   ║\n'
+        screen_title +='║                        .--  `-\ /,-===-.\ /-.  --`                                  ║\n'
+        screen_title +='║                       (----  _|  ||___||  |_  ----)                                 ║\n'
+        screen_title +='║                        `._,-.  \  `-.-.  /  ,-._,.                                  ║\n'
+        screen_title +='║                                 `-.___,-.                                           ║\n'
+        screen_title +='║                                                                                     ║\n'
+        screen_title +='╠═════════════════════════════════════════════════════════════════════════════════════╣\n'
+        screen_title +='║                                 S : Start !                                         ║\n'
+        screen_title +='╚═════════════════════════════════════════════════════════════════════════════════════╝'
+        # 3) Affichage du texte
+        print(screen_title)
+     
+        
+    # écran du niveau 1     
+    def display_p1(self):
+        self.clear()    
+        # Haut
+        screen_top = '╔════════════════════════════════╗\n'
+        screen_top += f'║         {self.resthonrant.title:<10}          ║\n'
+        screen_top += '╠════════════════════════════════╣'
+        #Resto
+        screen_resto = '╠════════════════════════════════╣\n'
+        screen_resto += '║                                ║\n'
+        screen_resto += f'║   {self.resthonrant.restaurant[0][0] } █ {self.resthonrant.restaurant[0][1] :<15}          ║\n'
+        screen_resto +=  '║                                ║\n'
+        screen_resto += f'║                    {self.resthonrant.restaurant[0][0] } █ {self.resthonrant.restaurant[0][1] :<3}     ║\n'
+        screen_resto += '║                                ║\n'
+        screen_resto += '╠════════════════════════════════╣'
+        # Centre
+        screen_data = '║                                ║\n'
+        screen_data += '║  Nombre de places totales:     ║\n'
+        screen_data += f'║              {self.donnees.nb_tables_totale:<10}        ║\n'
+        screen_data += '║                                ║\n'
+        screen_data += '║  Nombre de places disponibles: ║\n'
+        screen_data += f'║              {self.donnees.nb_tables_dispo:<9}         ║\n'
+        screen_data += '║                                ║\n'
+        screen_data += '║  Numéro de tables :            ║\n'
+        screen_data += f'║           Table 1 :  {self.donnees.pers_table_1 :<2} pers.  ║\n'
+        screen_data += f'║           Table 2 :  {self.donnees.pers_table_2 :<2} pers.  ║\n'
+        screen_data += '╠════════════════════════════════╣\n'
+        screen_data += '║         OH ! De nouveaux       ║\n'
+        screen_data += '║            clients !           ║\n'
+        screen_data += '╠════════════════════════════════╣\n'
+        screen_data += f'║   {self.resthonrant.list_cli[0]:<2} souhaite réserver    ║\n'
+        screen_data += f'║  pour {self.donnees.nb_places[2]:<2}pers. !!!              ║\n'
+        screen_data += '║- - - - - - - - - - - - - - - - ║\n'
+        screen_data += f'║   {self.resthonrant.list_cli[1]:<2} souhaite réserver    ║\n'
+        screen_data += f'║  pour {self.donnees.nb_places[1]:<2}pers. !!!              ║\n'
+        screen_data += '║- - - - - - - - - - - - - - - - ║\n'
+        screen_data += f'║   {self.resthonrant.list_cli[2]:<2} souhaite réserver    ║\n'
+        screen_data += f'║  pour {self.donnees.nb_places[0]:<2}pers. !!!              ║\n'
+        screen_data += '║- - - - - - - - - - - - - - - - ║\n'
+        screen_data += f'║   {self.resthonrant.list_cli[-1]:<2} souhaite réserver    ║\n'
+        screen_data += f'║  pour {self.donnees.nb_places[0]:<2}pers. !!!              ║\n'
+        screen_data += '╠════════════════════════════════╣\n'
+        screen_data += f'║     refus : {self.donnees.refus}                  ║'
+
+        # Bas
+        screen_menu = '╠════════════════════════════════╣\n'
+        screen_menu = '╠════════════════════════════════╣\n'
+        screen_menu += '║ 1:Prendre la réservation       ║\n'
+        screen_menu += '║ 2:Refuser                      ║\n'
+        screen_menu += "║ 3:Passer au service            ║\n"
+        screen_menu += "║ Q:Quitter le jeu               ║\n"
+        screen_menu += '╚════════════════════════════════╝'
+
+        # 3) Affichage du texte
+        print(screen_top)
+        print(screen_resto)
+        print(screen_data)
+        print(screen_menu)
+
+    # écran du niveau 2
+    def display_p2(self):
+        self.clear()
+        
+        # haut 
+        screen_haut = '╔════════════════════════════════╗\n'
+        screen_haut += f'║         {self.resthonrant.title:<10}          ║\n'
+        screen_haut += '╠════════════════════════════════╣'
+        # Resto
+        screen_resto = '╠════════════════════════════════╣\n'
+        screen_resto += '║                                ║\n'
+        screen_resto += f'║   {self.resthonrant.restaurant[0][0] } █ {self.resthonrant.restaurant[0][1] :<15}          ║\n'
+        screen_resto +=  '║                                ║\n'
+        screen_resto += f'║                    {self.resthonrant.restaurant[0][0] } █ {self.resthonrant.restaurant[0][1] :<3}     ║\n'
+        screen_resto += '║                                ║\n'
+        screen_resto += '╠════════════════════════════════╣'
+        # Menu 
+        screen_resto = '║                                ║\n'
+        screen_resto += '║             Menu 1 :           ║\n'
+        screen_resto += '║    Entrée : Sashimi de Fugu    ║\n'
+        screen_resto += '║    Plat : Steak de Requin et   ║\n'
+        screen_resto += '║     son riz blanc sauce Curry  ║\n'
+        screen_resto += '║    Dessert : Ile flottante     ║\n'
+        screen_resto += '║    Prix : 30 €                 ║\n'
+        screen_resto += '║--------------------------------║\n'
+        screen_resto += '║            Menu 2:             ║\n'
+        screen_resto += '║    Entrée : Salade Tahitienne  ║\n'
+        screen_resto += '║    Plat : Moules frites        ║\n'
+        screen_resto += '║    Dessert : Salade de fruits  ║\n'
+        screen_resto += '║              de mer            ║\n'
+        screen_resto += '║    Prix : 18 €                 ║\n'
+        screen_resto += '║--------------------------------║\n'
+        screen_resto += '║            Menu 3:             ║\n'
+        screen_resto += '║    Entrée : Caviar             ║\n'
+        screen_resto += '║    Plat : Sardines en boîte    ║\n'
+        screen_resto += '║    Dessert : Crêpe au sucre    ║\n'
+        screen_resto += '║    Prix : 25 €                 ║\n'
+        screen_resto += '╠════════════════════════════════╣\n'
+        screen_resto += f'║     refus : {self.donnees.refus}                  ║\n'
+        screen_resto += '╠════════════════════════════════╣'
+        # client
+        screen_data_1 = '║                                ║\n'
+        screen_data_1 += f'║           1. {self.donnees.fichier_client[0]}{" ":<11}║\n'
+        screen_data_1 += '║  souhaite commander le menu 3  ║\n'
+        screen_data_1 += '║                                ║' 
+        
+        screen_data_2 = '║                                ║\n'
+        screen_data_2 += f'║           1. {self.donnees.fichier_client[0]}{" ":<11}║\n'
+        screen_data_2 += '║  souhaite commander le menu 3  ║\n'
+        screen_data_2 += '║                                ║\n'
+        screen_data_2 += f'║           2. {self.donnees.fichier_client[-1]}{" ":<11}║\n'
+        screen_data_2 += '║  souhaite commander le menu 1  ║\n'
+        screen_data_2 += '║                                ║'
+        
+        # bas
+        screen_menu = '╠════════════════════════════════╣\n'
+        screen_menu += f'║ commandes en attentes : {self.donnees.c_e_a}      ║\n'
+        screen_menu += '╠════════════════════════════════╣\n'
+        screen_menu += '║ 1: Prendre la commande         ║\n'
+        screen_menu += '║ 2: Refuser                     ║\n'
+        screen_menu += "║ 3: Payer                       ║\n"
+        screen_menu += "║ Q: Quitter le jeu              ║\n"
+        screen_menu += '╚════════════════════════════════╝'
+        # affichage 
+        print(screen_haut)
+        print(screen_resto)
+        if str(len(self.donnees.fichier_client)) == '1' :
+            print(screen_data_1)
+            print(screen_menu)
+            pass
+            
+        if str(len(self.donnees.fichier_client)) == '2' :
+            print(screen_data_2)
+            print(screen_menu)
+            pass
+        
+        if str(len(self.donnees.fichier_client)) == '3' :
+            screen_data_3 = '║                                ║\n'
+            screen_data_3 += f'║           1. {self.donnees.fichier_client[0]}{" ":<11}║\n'
+            screen_data_3 += '║  souhaite commander le menu 3  ║\n'
+            screen_data_3 += '║                                ║\n'
+            screen_data_3 += f'║           2. {self.donnees.fichier_client[1]}{" ":<11}║\n'
+            screen_data_3 += '║  souhaite commander le menu 1  ║\n'
+            screen_data_3 += '║                                ║\n'
+            screen_data_3 += f'║           3. {self.donnees.fichier_client[-1]}{" ":<11}║\n'
+            screen_data_3 += '║  souhaite commander le menu 2  ║\n'
+            screen_data_3 += '║                                ║'
+            # bas
+            print(screen_data_3)
+            print(screen_menu)
+     
+    # écran du niveau 3    
+    def display_p3(self):
+        self.clear()
+        # Haut
+        screen_top = '╔════════════════════════════════╗\n'
+        screen_top += f'║         {self.resthonrant.title:<10}          ║\n'
+        screen_top += '╠════════════════════════════════╣'
+        # haut facture
+        screen_top_fact = '║                                ║\n'
+        screen_top_fact += '║            Facture             ║\n'
+        screen_top_fact += '║                                ║\n'
+        screen_top_fact += '╠════════════════════════════════╣\n'
+        screen_top_fact += '║                                ║\n'
+        screen_top_fact += '║          ATTENTION A           ║\n'
+        screen_top_fact += "║        L'ORTHOGRAPHE !!!       ║\n"
+        screen_top_fact += '║                                ║\n'
+        screen_top_fact += '╠════════════════════════════════╣'
+        # centre
+        screen_fact_1 = '║                                ║\n'
+        screen_fact_1 += f'║   {self.donnees.fichier_client[0]} doit payer{" ":<11}║\n'
+        screen_fact_1 += f'║   {self.donnees.menu_client[self.donnees.fichier_client[0]]} € par personnes !!!{" ":<7}║\n'
+        screen_fact_1 += f'║   Nombre de personnes : {self.donnees.nomb_per[0]}      ║\n'
+        screen_fact_1 += '║                                ║'
+        
+        screen_fact_2 = '║                                ║\n'
+        screen_fact_2 += f'║   {self.donnees.fichier_client[0]} doit payer{" ":<11}║\n'
+        screen_fact_2 += f'║   {self.donnees.menu_client[self.donnees.fichier_client[0]]} € par personnes !!!{" ":<7}║\n'
+        screen_fact_2 += f'║   Nombre de personnes : {self.donnees.nomb_per[0]}      ║\n'
+        screen_fact_2 += '║- - - - - - - - - - - - - - - - ║\n'
+        screen_fact_2 += f'║   {self.donnees.fichier_client[-1]} doit payer{" ":<11}║\n'
+        screen_fact_2 += f'║   {self.donnees.menu_client[self.donnees.fichier_client[-1]]} € par personnes !!!{" ":<7}║\n'
+        screen_fact_2 += f'║   Nombre de personnes : {self.donnees.nomb_per[-1]}      ║\n'
+        screen_fact_2 += '║                                ║'
+        
+        screen_fact = '╠════════════════════════════════╣\n'
+        screen_fact += f'║   refus : {self.donnees.refus:<10}           ║\n'
+        screen_fact += f'║   facture en attente : {self.donnees.n_f_a}       ║'
+        # Bas
+        screen_menu = '╠════════════════════════════════╣\n'
+        screen_menu = '╠════════════════════════════════╣\n'
+        screen_menu += "║ 1: Encaisser                   ║\n"
+        screen_menu += "║ S: Suite                       ║\n"
+        screen_menu += "║ Q: Quitter le jeu              ║\n"
+        screen_menu += '╚════════════════════════════════╝'
+        
+        
+        # Affichage 
+        print(screen_top)
+        print(screen_top_fact)
+        if str(len(self.donnees.fichier_client)) == '1' :
+            print(screen_fact_1)
+            print(screen_fact)
+            print(screen_menu)
+            pass
+        if str(len(self.donnees.fichier_client)) == '2' :
+            print(screen_fact_2)
+            print(screen_fact)
+            print(screen_menu)
+            pass
+        if str(len(self.donnees.fichier_client)) == '3' :
+            screen_fact_3 = '║                                ║\n'
+            screen_fact_3 += f'║   {self.donnees.fichier_client[0]} doit payer{" ":<11}║\n'
+            screen_fact_3 += f'║   {self.donnees.menu_client[self.donnees.fichier_client[0]]} € par personnes !!!{" ":<7}║\n'
+            screen_fact_3 += f'║   Nombre de personnes : {self.donnees.nomb_per[0]}      ║\n'
+            screen_fact_3 += '║- - - - - - - - - - - - - - - - ║\n'
+            screen_fact_3 += f'║   {self.donnees.fichier_client[1]} doit payer{" ":<11}║\n'
+            screen_fact_3 += f'║   {self.donnees.menu_client[self.donnees.fichier_client[1]]} € par personnes !!!{" ":<7}║\n'
+            screen_fact_3 += f'║   Nombre de personnes : {self.donnees.nomb_per[1]}      ║\n'
+            screen_fact_3 += '║- - - - - - - - - - - - - - - - ║\n'
+            screen_fact_3 += f'║   {self.donnees.fichier_client[-1]} doit payer{" ":<11}║\n'
+            screen_fact_3 += f'║   {self.donnees.menu_client[self.donnees.fichier_client[-1]]} € par personnes !!!{" ":<7}║\n'
+            screen_fact_3 += f'║   Nombre de personnes : {self.donnees.nomb_per[-1]}      ║\n'
+            screen_fact_3 += '║                                ║'
+            
+            print(screen_fact_3)
+            print(screen_fact)
+            print(screen_menu)
+            
+    # écran de fin du jeu
+    def display_suite(self):
+        self.clear()
+        if self.donnees.refus < self.donnees.refus_max :
+       
+            screen_end = '╔════════════════════════════════════════════════════════════════════════════╗\n'
+            screen_end +='║                 _______      ___       _______ .__   __.  _______          ║\n'
+            screen_end +='║                /  _____|    /   \     /  _____||  \ |  | |   ____|         ║\n'
+            screen_end +='║               |  |  __     /  ^  \   |  |  __  |   \|  | |  |__            ║\n'
+            screen_end +='║               |  | |_ |   /  /_\  \  |  | |_ | |  . `  | |   __|           ║\n'
+            screen_end +='║               |  |__| |  /  _____  \ |  |__| | |  |\   | |  |____          ║\n'
+            screen_end +='║                \______| /__/     \__\ \______| |__| \__| |_______|         ║\n'
+            screen_end +='║                ‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗         ║\n'
+            screen_end +='║                                                                            ║\n'
+            screen_end +='║                                                                            ║\n'
+            screen_end +='║                           ║║║░░▄██║║║║░░░▄█░╔╗                             ║\n'
+            screen_end +='║                           ╚╬╝░██▄█╬╬╬╬╬╬███░║║                             ║\n'
+            screen_end +='║                           ░║░░░▀██║║║║░░░▀█░╠╝                             ║\n'
+            screen_end +='║                           ░║░░░░░░░░░░░░░░░░║                              ║\n'
+            screen_end +='║                                                                            ║\n'
+            screen_end +='╠════════════════════════════════════════════════════════════════════════════╣\n'
+            screen_end +=f'║                        Recette : {self.donnees.prix:<3} €                                     ║\n'
+            screen_end +=f'║           Vous avez {self.donnees.refus} erreurs, BRAVO vous êtes un vrai chef ☻              ║\n'
+            screen_end +='║                    REVENEZ QUAND VOUS VOULEZ :)                            ║\n'
+            screen_end +='╚════════════════════════════════════════════════════════════════════════════╝'
+            # Affichage
+            print(screen_end)
+            
+        if int(self.donnees.prix) == 0 or self.donnees.refus >= self.donnees.refus_max :
+            self.clear()
+            screen_end = '╔════════════════════════════════════════════════════════════════════════╗\n'
+            screen_end +='║                          _____             _                           ║\n'
+            screen_end +='║                         |  __ \           | |                          ║\n'
+            screen_end +='║                         | |__) |__ _ __ __| |_   _                     ║\n'
+            screen_end +='║                         |  ___/ _ \ .__/ _` | | | |                    ║\n'
+            screen_end +='║                         | |  |  __/ | | (_| | |_| |                    ║\n'
+            screen_end +='║                         |_|   \___|_|  \__,_|\__,_|                    ║\n'
+            screen_end +='║                        ‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗                   ║\n'
+            screen_end +='║                                                                        ║\n'
+            screen_end +='║                                                                        ║\n'
+            screen_end +='║                           ║║║░░▄██║║║║░░░▄█░╔╗                         ║\n'
+            screen_end +='║                           ╚╬╝░██▄█╬╬╬╬╬╬███░║║                         ║\n'
+            screen_end +='║                           ░║░░░▀██║║║║░░░▀█░╠╝                         ║\n'
+            screen_end +='║                           ░║░░░░░░░░░░░░░░░░║                          ║\n'
+            screen_end +='║                                                                        ║\n'
+            screen_end +='╠════════════════════════════════════════════════════════════════════════╣\n'
+            screen_end +=f'║                        Recette : {self.donnees.prix:<3} €                                 ║\n'
+            screen_end +=f'║           Vous avez {self.donnees.refus} erreurs, votre Res-THON-rant a coulé             ║\n'
+            screen_end +='║                    REVENEZ QUAND VOUS VOULEZ :)                        ║\n'
+            screen_end +='╚════════════════════════════════════════════════════════════════════════╝'
+            # Affichage
+            print(screen_end)
+    
+    # écran d'arrêt du jeu 
+    def display_fin(self):
+         
+         # Ecran de fin
+         self.clear()
+         if self.donnees.refus < self.donnees.refus_max :
+        
+             screen_end = '╔════════════════════════════════════════════════════════════════════════════╗\n'
+             screen_end +='║                 _______      ___       _______ .__   __.  _______          ║\n'
+             screen_end +='║                /  _____|    /   \     /  _____||  \ |  | |   ____|         ║\n'
+             screen_end +='║               |  |  __     /  ^  \   |  |  __  |   \|  | |  |__            ║\n'
+             screen_end +='║               |  | |_ |   /  /_\  \  |  | |_ | |  . `  | |   __|           ║\n'
+             screen_end +='║               |  |__| |  /  _____  \ |  |__| | |  |\   | |  |____          ║\n'
+             screen_end +='║                \______| /__/     \__\ \______| |__| \__| |_______|         ║\n'
+             screen_end +='║                ‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗         ║\n'
+             screen_end +='║                                                                            ║\n'
+             screen_end +='║                                                                            ║\n'
+             screen_end +='║                           ║║║░░▄██║║║║░░░▄█░╔╗                             ║\n'
+             screen_end +='║                           ╚╬╝░██▄█╬╬╬╬╬╬███░║║                             ║\n'
+             screen_end +='║                           ░║░░░▀██║║║║░░░▀█░╠╝                             ║\n'
+             screen_end +='║                           ░║░░░░░░░░░░░░░░░░║                              ║\n'
+             screen_end +='║                                                                            ║\n'
+             screen_end +='╠════════════════════════════════════════════════════════════════════════════╣\n'
+             screen_end +=f'║           Vous avez {self.donnees.refus} erreurs, BRAVO vous êtes un vrai chef ☻              ║\n'
+             screen_end +='║                    REVENEZ QUAND VOUS VOULEZ :)                            ║\n'
+             screen_end +='╚════════════════════════════════════════════════════════════════════════════╝'
+             # Affichage
+             print(screen_end)
+             
+         else :
+             self.clear()
+             screen_end = '╔════════════════════════════════════════════════════════════════════════╗\n'
+             screen_end +='║                          _____             _                           ║\n'
+             screen_end +='║                         |  __ \           | |                          ║\n'
+             screen_end +='║                         | |__) |__ _ __ __| |_   _                     ║\n'
+             screen_end +='║                         |  ___/ _ \ .__/ _` | | | |                    ║\n'
+             screen_end +='║                         | |  |  __/ | | (_| | |_| |                    ║\n'
+             screen_end +='║                         |_|   \___|_|  \__,_|\__,_|                    ║\n'
+             screen_end +='║                        ‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗                   ║\n'
+             screen_end +='║                                                                        ║\n'
+             screen_end +='║                                                                        ║\n'
+             screen_end +='║                           ║║║░░▄██║║║║░░░▄█░╔╗                         ║\n'
+             screen_end +='║                           ╚╬╝░██▄█╬╬╬╬╬╬███░║║                         ║\n'
+             screen_end +='║                           ░║░░░▀██║║║║░░░▀█░╠╝                         ║\n'
+             screen_end +='║                           ░║░░░░░░░░░░░░░░░░║                          ║\n'
+             screen_end +='║                                                                        ║\n'
+             screen_end +='╠════════════════════════════════════════════════════════════════════════╣\n'
+             screen_end +=f'║           Vous avez   {self.donnees.refus} erreurs, votre Res-THON-rant a coulé           ║\n'
+             screen_end +='║                    REVENEZ QUAND VOUS VOULEZ :)                        ║\n'
+             screen_end +='╚════════════════════════════════════════════════════════════════════════╝'
+             # Affichage
+             print(screen_end)
+     
+        
+    #def display_m(self):
+        #screen = "Arrête de te torturer avec les mauvases commandes ..."
+        #print(screen)
+#------------------------------------------------------------------------------ 
+       
+    def process_accueil_input(self):
+        code = input('\nCode action: ')
+        
+        if code == 'S':
+            self.action_start()
+
+      
+    def process_p1_input(self):
+        '''Effectue des actions en fonction du code saisi.'''
+        code = input('\nCode action: ')
+        
+        if code == '1':
+            self.action_reservation()
+
+        if code == '2':
+            self.action_refus()
+            
+        if code == '3':
+            self.action_lancer_service()
+        
+        if code == 'Q':
+            self.action_quit()
+        
+        if code == 'X':
+            self.action_x()
+            
+        #if code == 'Margaux':
+            #self.margaux()
+       
+    def process_p2_input(self):
+        '''Effectue des actions en fonction du code saisi.'''
+        code = input('\nCode action: ')
+        
+        if code == '1':
+            self.action_commande()
+            
+        if code == '2':
+            self.action_refus()
+            
+        if code == '3':
+            self.action_lancer_facture()
+        
+        if code == 'Q':
+            self.action_quit()
+        
+        if code == 'X':
+            self.action_x()
+            
+    def process_p3_input(self):
+        code = input('\nCode action: ')
+        
+        if code == '1':
+            self.action_facture()
+            
+        if code == 'S':
+            self.action_suite()
+            
+        if code == 'Q':
+            self.action_quit()
+        
+        if code == 'X':
+            self.action_x()
+            
+    def process_suite(self):
+        code = input()
+        
+        if code == 'Q':
+            self.action_quit()
+        
+        
+    def process_fin_input(self):
+        code = input()
+            
+        if code == 'Q':
+            self.action_quit()
+        
+        if code == 'X':
+            self.action_x()
+            
+#------------------------------------------------------------------------------
+
+    def action_start(self):
+        
+        self.W +=1
+
+    def action_reservation(self):
+       self.donnees.action_reservation()
+        
+    def action_commande(self):
+        self.donnees.action_commande()
+        
+    def action_facture(self):
+        self.donnees.action_facture()
+
+    def action_refus(self):
+        self.donnees.action_refus()
+        
+    def action_lancer_service(self):
+        
+        self.W +=1
+        
+    def action_lancer_facture(self):
+        
+        self.W+=1
+
+    def action_suite(self):
+        self.W+=1
+        
+
+    def action_quit(self):
+        '''Fait arrêter le programme en arrêtant la boucle principale'''
+        self.display_fin()
+        self.program_running = False
+        
+        
+    def action_x(self):
+       pass
+
+    #def maragux(self):
+        #self.display_m()
+        #self.program_running = False
+
+
+hmi = TextHmi()
+hmi.start()
